@@ -20,6 +20,9 @@ app.get('/api/health', (req, res) => {
 const vagasRoutes = require('./routes/vagas.routes');
 app.use('/api/vagas', vagasRoutes);
 
+const authRoutes = require('./routes/auth.routes');
+app.use('/api/auth', authRoutes);
+
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).json({ erro: 'Erro interno do servidor' });
