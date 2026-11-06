@@ -23,6 +23,9 @@ app.use('/api/vagas', vagasRoutes);
 const authRoutes = require('./routes/auth.routes');
 app.use('/api/auth', authRoutes);
 
+const cepRoutes = require('./routes/cep.routes');
+app.use('/api/cep', cepRoutes);
+
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).json({ erro: 'Erro interno do servidor' });
