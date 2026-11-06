@@ -2,6 +2,7 @@ const { Router } = require('express');
 const router = Router();
 
 const db = require('../database/db');
+const auth = require('../middleware/auth.middleware');
 
 router.get('/', (req, res) => {
   const vagas = db.prepare(`
@@ -14,11 +15,12 @@ router.get('/', (req, res) => {
   res.json(vagas);
 });
 
-router.post('/', (req, res) => {
-  const { titulo, empresa_id, tipo, tecnologias, salario, cep, cidade, estado, descricao } = req.body;
+router.post('/', auth, (req, res) => {
+  const empresa_id = req.empresa.id;
+  const { titulo, tipo, tecnologias, salario, cep, cidade, estado, descricao } = req.body;
 
-  if (!titulo || !empresa_id || !tipo) {
-    return res.status(400).json({ erro: 'Campos obrigatórios: titulo, empresa_id, tipo' });
+  if (!titulo || !tipo) {
+    return res.status(400).json({ erro: 'Campos obrigatórios: titulo, tipo' });
   }
 
   const result = db.prepare(`
@@ -72,7 +74,7 @@ router.put('/:id', (req, res) => {
   res.json(atualizada);
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', auth, (req, res) => {
   const { id } = req.params;
   const result = db.prepare('DELETE FROM vagas WHERE id = ?').run(id);
 
